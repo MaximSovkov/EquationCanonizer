@@ -56,7 +56,7 @@ namespace EquationCanonizer.Tools
             // Remove extra spaces at the beginning and remove the plus sign, as it is redundant.
             if (equationString[1] == SignToken.MinusSignRepresentation)
             {
-                return equationString.Remove(0, 1).Remove(2, 1);
+                return equationString.Remove(0, 1).Remove(1, 1);
             }
 
             return equationString.Remove(0, 3);

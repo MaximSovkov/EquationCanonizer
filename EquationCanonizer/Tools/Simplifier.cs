@@ -50,17 +50,31 @@ namespace EquationCanonizer.Tools
 
             var parenthesislessTokenCollection = new List<IToken>();
             var mustInvertArithmeticSign = false;
+            var previousSign = SignToken.PlusSignRepresentation;
 
             foreach (var token in tokenCollection)
             {
-                if (token is SignToken signToken && mustInvertArithmeticSign)
+                if (token is SignToken signToken)
                 {
-                    var invertedArithmeticSign = InvertArithmeticSign(signToken.Sign);
-                    parenthesislessTokenCollection.Add(new SignToken(invertedArithmeticSign));
+                    previousSign = signToken.Sign;
+                    if (mustInvertArithmeticSign)
+                    {
+                        var invertedArithmeticSign = InvertArithmeticSign(signToken.Sign);
+                        parenthesislessTokenCollection.Add(new SignToken(invertedArithmeticSign));
+                    }
+                    else
+                    {
+                        parenthesislessTokenCollection.Add(signToken);
+                    }
                 }
-                else if (token is LeftParenthesisToken || token is RightParenthesisToken)
+                else if (token is LeftParenthesisToken && previousSign == SignToken.MinusSignRepresentation)
                 {
                     mustInvertArithmeticSign = !mustInvertArithmeticSign;
+                    parenthesislessTokenCollection.Add(new SignToken(SignToken.MinusSignRepresentation));
+                }
+                else if (token is RightParenthesisToken)
+                {
+                    mustInvertArithmeticSign = false;
                 }
                 else
                 {
