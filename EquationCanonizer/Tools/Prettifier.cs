@@ -51,7 +51,7 @@ namespace EquationCanonizer.Tools
             return PrettifyResult(equationStringBuilder.ToString());
         }
 
-        private string PrettifyResult(string equationString)
+        private static string PrettifyResult(string equationString)
         {
             // Remove extra spaces at the beginning and remove the plus sign, as it is redundant.
             if (equationString[1] == SignToken.MinusSignRepresentation)

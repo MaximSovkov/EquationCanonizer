@@ -17,8 +17,7 @@ namespace EquationCanonizer.Tools
         /// <returns>Simplified token collection.</returns>
         public IList<IToken> SimplifyEquationTokens(IList<IToken> tokenCollecton)
         {
-            if (tokenCollecton.OfType<SignToken>()
-                .Where(token => token.Sign == SignToken.EqualSignRepresentation).Count() != 1)
+            if (tokenCollecton.OfType<SignToken>().Count(token => token.Sign == SignToken.EqualSignRepresentation) != 1)
             {
                 throw new ArgumentException("Count of equal signs must be equal to 1!");
             }
@@ -85,7 +84,7 @@ namespace EquationCanonizer.Tools
             return parenthesislessTokenCollection;
         }
 
-        private char InvertArithmeticSign(char arithmeticSign)
+        private static char InvertArithmeticSign(char arithmeticSign)
         {
             return arithmeticSign == SignToken.PlusSignRepresentation
                 ? SignToken.MinusSignRepresentation
@@ -120,7 +119,7 @@ namespace EquationCanonizer.Tools
             }
         }
 
-        private IList<IToken> SumCoefficients(IList<IToken> tokenCollection)
+        private static IList<IToken> SumCoefficients(IList<IToken> tokenCollection)
         {
             // Term storage used for easy calculation of coefficients.
             var termStorage = new Dictionary<string, double>();

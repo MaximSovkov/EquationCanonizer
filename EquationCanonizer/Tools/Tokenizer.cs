@@ -15,7 +15,7 @@ namespace EquationCanonizer.Tools
         /// <summary>
         /// Split the equations into tokens.
         /// </summary>
-        /// <param name="equation">The string representation of the equation./param>
+        /// <param name="equation">The string representation of the equation.</param>
         /// <returns>Token collection.</returns>
         public IList<IToken> SplitEquationIntoTokens(string equation)
         {
@@ -23,13 +23,8 @@ namespace EquationCanonizer.Tools
             var variableBuffer = new StringBuilder();
             var tokenCollection = new List<IToken>();
 
-            foreach (char character in equation)
+            foreach (var character in equation.Where(character => character != ' '))
             {
-                if (character == ' ')
-                {
-                    continue;
-                }
-
                 if (IsTermTokenCharacter(character, variableBuffer))
                 {
                     variableBuffer.Append(character);
@@ -75,7 +70,7 @@ namespace EquationCanonizer.Tools
             return tokenCollection;
         }
 
-        private bool IsTermTokenCharacter(char character, StringBuilder variableBuffer)
+        private static bool IsTermTokenCharacter(char character, StringBuilder variableBuffer)
         {
             if (char.IsLetter(character))
             {
@@ -90,12 +85,12 @@ namespace EquationCanonizer.Tools
             return bufferIsNotEmpty && isDigitOrPowCharacter;
         }
 
-        private bool IsSignTokenCharacter(char c)
+        private static bool IsSignTokenCharacter(char c)
         {
             return SignToken.SignRepresentationCollection.Contains(c);
         }
 
-        private double GetCoefficientFromBuffer(StringBuilder coefficientBuffer)
+        private static double GetCoefficientFromBuffer(StringBuilder coefficientBuffer)
         {
             if (coefficientBuffer.Length == 0)
             {
@@ -109,7 +104,7 @@ namespace EquationCanonizer.Tools
             return coefficient;
         }
 
-        private string GetVariableFromBuffer(StringBuilder variableBuffer)
+        private static string GetVariableFromBuffer(StringBuilder variableBuffer)
         {
             if (variableBuffer.Length == 0)
             {
