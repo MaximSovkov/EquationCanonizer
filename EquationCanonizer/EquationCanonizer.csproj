@@ -50,6 +50,9 @@
     <Compile Include="Tokens\SignToken.cs" />
     <Compile Include="Tokens\RightParenthesisToken.cs" />
     <Compile Include="Tokens\TermToken.cs" />
+    <Compile Include="Tools\Prettifier.cs" />
+    <Compile Include="Tools\Simplifier.cs" />
+    <Compile Include="Tools\Tokenizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
