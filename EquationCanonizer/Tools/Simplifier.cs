@@ -19,7 +19,7 @@ namespace EquationCanonizer.Tools
         {
             if (tokenCollecton.OfType<SignToken>().Count(token => token.Sign == SignToken.EqualSignRepresentation) != 1)
             {
-                throw new ArgumentException("Count of equal signs must be equal to 1!");
+                throw new InvalidOperationException("Count of equal signs must be equal to 1!");
             }
 
             var equalityToken = tokenCollecton.OfType<SignToken>()
