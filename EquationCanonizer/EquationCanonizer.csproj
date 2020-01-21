@@ -45,6 +45,11 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tokens\IToken.cs" />
+    <Compile Include="Tokens\LeftParenthesisToken.cs" />
+    <Compile Include="Tokens\SignToken.cs" />
+    <Compile Include="Tokens\RightParenthesisToken.cs" />
+    <Compile Include="Tokens\TermToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
