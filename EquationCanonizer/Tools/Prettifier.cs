@@ -38,8 +38,8 @@ namespace EquationCanonizer.Tools
                 }
                 else if (token is TermToken termToken)
                 {
-                    // // If the coefficient is not 0.
-                    if (Math.Abs(termToken.Coefficient - 1) > double.Epsilon)
+                    // If the coefficient is not 0.
+                    if (Math.Abs(termToken.Coefficient - 1) > double.Epsilon || string.IsNullOrWhiteSpace(termToken.Variable))
                     {
                         equationStringBuilder.Append(termToken.Coefficient.ToString(CultureInfo.InvariantCulture));
                     }
