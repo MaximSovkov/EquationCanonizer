@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EquationCanonizer.Tools
 {
@@ -132,7 +133,7 @@ namespace EquationCanonizer.Tools
                 if (token is TermToken termToken)
                 {
                     var coefficient = mustNegateCoefficient ? -termToken.Coefficient : termToken.Coefficient;
-                    var termTokenVariable = termToken.Variable;
+                    var termTokenVariable = ConsolidateVariablesOrder(termToken.Variable);
 
                     // Save new terms in the storage or get already saved and calculate coefficient.
                     if (termStorage.TryGetValue(termTokenVariable, out var currentCoefficient))
@@ -150,9 +151,10 @@ namespace EquationCanonizer.Tools
                 }
             }
 
-            var isNotSingleTerm = termStorage.Count > 1;
+            var orderedTerms = OrderTerms(termStorage);
+            var isNotSingleTerm = orderedTerms.Count > 1;
 
-            foreach (var term in termStorage)
+            foreach (var term in orderedTerms)
             {
                 var isZeroCoefficient = Math.Abs(term.Value) < double.Epsilon;
                 if (isZeroCoefficient && isNotSingleTerm)
@@ -182,6 +184,39 @@ namespace EquationCanonizer.Tools
             simplifiedTokenCollection.Add(new TermToken(0, string.Empty));
 
             return simplifiedTokenCollection;
+        }
+
+        private static IDictionary<string, double> OrderTerms(Dictionary<string, double> termStorage)
+        {
+            var onlyNumbers = termStorage.Where(x => x.Key == string.Empty).ToList();
+
+            var orderedTerms = termStorage
+                .Where(x => x.Key != string.Empty)
+                .OrderByDescending(x => x.Key.Contains('^'))
+                .ThenBy(x => x.Key.First())
+                .ToList();
+
+            orderedTerms.AddRange(onlyNumbers);
+
+            return orderedTerms.ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        private static string ConsolidateVariablesOrder(string termTokenVariable)
+        {
+            if (termTokenVariable.Count(x => x == '^') == 0)
+            {
+                return string.Concat(termTokenVariable.OrderBy(x => x));
+            }
+            else if (termTokenVariable.Count(x => x == '^') > 1)
+            {
+                var powTermRegex = new Regex(@"(\w\^\d+)");
+                var powTerms = powTermRegex.Split(termTokenVariable).Where(x => x != string.Empty)
+                    .OrderBy(x => x.First());
+
+                return string.Concat(powTerms);
+            }
+
+            return termTokenVariable;
         }
     }
 }
