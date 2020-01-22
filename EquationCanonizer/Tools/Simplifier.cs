@@ -150,10 +150,12 @@ namespace EquationCanonizer.Tools
                 }
             }
 
+            var isNotSingleTerm = termStorage.Count > 1;
+
             foreach (var term in termStorage)
             {
-                // If the coefficient is 0 (variable only).
-                if (Math.Abs(term.Value) < double.Epsilon)
+                var isZeroCoefficient = Math.Abs(term.Value) < double.Epsilon;
+                if (isZeroCoefficient && isNotSingleTerm)
                 {
                     continue;
                 }
@@ -163,7 +165,16 @@ namespace EquationCanonizer.Tools
                     : SignToken.MinusSignRepresentation;
 
                 simplifiedTokenCollection.Add(new SignToken(tokenSignArithmeticOperator));
-                simplifiedTokenCollection.Add(new TermToken(Math.Abs(term.Value), term.Key));
+
+                if (isNotSingleTerm)
+                {
+                    simplifiedTokenCollection.Add(new TermToken(Math.Abs(term.Value), term.Key));
+                }
+                else
+                {
+                    simplifiedTokenCollection.Add(new TermToken(Math.Abs(term.Value),
+                        isZeroCoefficient ? string.Empty : term.Key));
+                }
             }
 
             // Add a zero assignment to the final result.
